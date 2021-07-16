@@ -13,13 +13,13 @@ type KeyData struct {
 	data []byte
 }
 
-func Encode(kd *KeyData) string {
+func EncodeKeyData(kd *KeyData) string {
 	key := b64.StdEncoding.EncodeToString(kd.key)
 	data := b64.StdEncoding.EncodeToString(kd.data)
 	return fmt.Sprintf("%s%s%s", key, SEPARATOR, data)
 }
 
-func Decode(str string) (*KeyData, error) {
+func DecodeKeyData(str string) (*KeyData, error) {
 	parts := strings.Split(str, SEPARATOR)
 	if len(parts) != 2 {
 		return nil, fmt.Errorf("Cannot split string into key and value")

@@ -119,7 +119,7 @@ outer:
 			if !ok {
 				break outer
 			}
-			d.writer.WriteString(Encode(&kd) + "\n")
+			d.writer.WriteString(EncodeKeyData(&kd) + "\n")
 		case <-ctx.Done():
 			break outer
 		}

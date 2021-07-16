@@ -39,11 +39,11 @@ func main() {
 	defer client.Close()
 	log.Printf("Redis connection established")
 
-	dumper := NewRedisDumper(config, client)
-	defer dumper.Close()
-	log.Printf("Starting the dump")
-	ctr := dumper.Dump()
-	log.Printf("%d keys have been dumped to file", ctr)
+	if config.Dump {
+		dump(config, client)
+	} else if config.Restore {
+		restore(config, client)
+	}
 }
 
 type Config struct {
@@ -118,4 +118,20 @@ func resolveFile(conf *Config) {
 	df = strings.Replace(df, "${port}", strconv.Itoa(conf.Port), -1)
 	df = strings.Replace(df, "${db}", strconv.Itoa(conf.Database), -1)
 	conf.DumpFile = df
+}
+
+func dump(config *Config, client RedisClient) {
+	dumper := NewRedisDumper(config, client)
+	defer dumper.Close()
+	log.Printf("Starting the dump")
+	ctr := dumper.Dump()
+	log.Printf("%d keys have been dumped to file", ctr)
+}
+
+func restore(config *Config, client RedisClient) {
+	restorer := NewRedisRestorer(config, client)
+	defer restorer.Close()
+	log.Printf("Starting the restore")
+	ctr := restorer.Restore()
+	log.Printf("%d keys have been restored from file", ctr)
 }
