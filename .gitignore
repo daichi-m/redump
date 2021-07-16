@@ -1,0 +1,4 @@
+redump
+*.log
+*.dump
+.vscode
