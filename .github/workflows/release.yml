@@ -39,15 +39,11 @@ jobs:
       env:
         GO111MODULE: "on"
         GOOS: "windows"
-    - name: List
-      run: ls -alrth
       
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          redump-linux-${GIT_TAG_NAME}.tar.gz
-          redump-darwin-${GIT_TAG_NAME}.tar.gz
-          redump-windows-${GIT_TAG_NAME}.tar.gz
+          redump-*.tar.gz
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
