@@ -39,6 +39,8 @@ jobs:
       env:
         GO111MODULE: "on"
         GOOS: "windows"
+    - name: List
+      run: ls -alrth
       
     - name: Release
       uses: softprops/action-gh-release@v1
