@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags: ['*']
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Get tag
+      uses: olegtarasov/get-tag@v2.1
+      
+    - name: Test
+      run: go test -v ./...
+      env:
+        GO111MODULE: "on"
+
+    - name: Linux Build
+      run: go build -v ./... && tar cvzf redump-linux-${GIT_TAG_NAME}.tar.gz
+      env:
+        GO111MODULE: "on"
+        GOOS: "linux"
+    - name: Darwin Build
+      run: go build -v ./... && tar cvzf redump-darwin-${GIT_TAG_NAME}.tar.gz
+      env:
+        GO111MODULE: "on"
+        GOOS: "darwin"
+    - name: Windows Build
+      run: go build -v ./... && tar cvzf redump-windows-${GIT_TAG_NAME}.tar.gz
+      env:
+        GO111MODULE: "on"
+        GOOS: "windows"
+      
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          redump-linux-${GIT_TAG_NAME}.tar.gz
+          redump-darwin-${GIT_TAG_NAME}.tar.gz
+          redump-windows-${GIT_TAG_NAME}.tar.gz
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
