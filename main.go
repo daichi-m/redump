@@ -21,7 +21,7 @@ func main() {
 	if config.logFile == "-" || config.logFile == "stderr" {
 		lf = os.Stderr
 	} else {
-		lf, err = os.OpenFile(config.logFile, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0755)
+		lf, err = os.OpenFile(config.logFile, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0o644)
 		if err != nil {
 			log.Println("Could not open logfile, will fall back to logging to stderr")
 			lf = os.Stderr
